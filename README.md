@@ -2,18 +2,15 @@
 <p>For Use With Ubuntu 20.04</p>
 <h2>SSH Lockdown &amp; Non-root sudo User</h2>
 Give the new user a username of your choice, enter strong password and any other desired user information.
-
-`adduser username`
+<br>`adduser username`
 
 Add the user to the sudo group.
-
-`usermod -aG sudo username`
+<br>`usermod -aG sudo username`
 
 Assuming you added an ssh public key to your VPS server on its creation, and were not asked for a passwod on logging in to the server, copy the key to the new user's directory and give ownership to the user.
-
-`mkdir /home/username/.ssh`<br>
-`cp .ssh/authorized_keys /home/username/.ssh/`
-`chown -R username /home/username/.ssh`
+<br>`mkdir /home/username/.ssh`
+<br>`cp .ssh/authorized_keys /home/username/.ssh/`
+<br>`chown -R username /home/username/.ssh`
 
 Edit the ssh configuration to a custom port, disable root access, and disable password logins.
 
