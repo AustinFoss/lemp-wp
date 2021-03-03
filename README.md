@@ -70,7 +70,7 @@ Last in the automated process some unique authorization keys will be printed out
 <br>`define('LOGGED_IN_SALT',   'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
 <br>`define('NONCE_SALT',       'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
 
-Copy all 8 rows, open the `wp-config.php` file and replace the default matching set of lines.
+Copy all 8 rows, open the `/var/www/wordpress/wp-config.php` file and replace the default matching set of lines.
 Then locate the matching following 3 lines and replace the values so that they match the following values.
 <br>`define( 'DB_NAME', 'wordpress' );`
 <br>`define( 'DB_USER', 'wordpressuser' );`
