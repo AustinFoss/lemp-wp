@@ -25,7 +25,10 @@ server {
 	# SSL configuration
 	#
 	listen 443 ssl;
-	listen [::]:443 ssl;	
+	listen [::]:443 ssl;
+	include snippets/self-signed.conf;
+        include snippets/ssl-params.conf;
+	
         # Note: You should disable gzip for SSL traffic.
 	# See: https://bugs.debian.org/773332
 	#
