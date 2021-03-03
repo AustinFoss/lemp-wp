@@ -83,6 +83,15 @@ These values were set during the install script's process. The password can be c
 Add this additional definition to `wp-config.php`.
 <br>`define( 'FS_METHOD', 'direct' );`
 
+Normal HTTP is currently being redirected by default to HTTPS, but this must be set to the IP address of your VPS in the second server block of `/etc/nginx/sites-available/wordpress`.
+<br>`sudo nano /etc/nginx/sites-available/wordpress`
+<br>`server {`
+<br>`    listen 80;`
+<br>`    listen [::]:80;`
+<br>`    server_name xxx.xxx.xxx.xxx;`
+<br>`    return 301 https://$server_name$request_uri;`
+<br>`}`
+
 Reload the NGINX configuration file and check for syntax errors.
 <br>`sudo nginx -t`
 
@@ -98,4 +107,4 @@ Reload nginx.
 You will now be able to navigate to the Wordpress landing page using the IP address of your VPS over HTTPS in a browser.
 <br>`https://xxx.xxx.xxx.xxx`
 
-There will again be an error due to the self signed nature of our SSL certifcate. Simply click "Advanced" and "Proceed".
+There will again be an error due to the self signed nature of our SSL certifcate. Simply click "Advanced" and proceed to Wordpress installation page. Select your language, name your blog, and create the admin user.
