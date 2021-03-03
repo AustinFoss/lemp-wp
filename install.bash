@@ -33,7 +33,7 @@ echo "add_header X-Frame-Options DENY;" >> /etc/nginx/snippets/ssl-params.conf
 echo "add_header X-Content-Type-Options nosniff;" >> /etc/nginx/snippets/ssl-params.conf
 echo 'add_header X-XSS-Protection "1; mode=block";' >> /etc/nginx/snippets/ssl-params.conf
 
-cp ~/lemp-wp/wordpress /etc/nginx/sites-available/wordpress
+cp wordpress /etc/nginx/sites-available/wordpress
 
 mariadb <<EOF
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
