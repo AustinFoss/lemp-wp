@@ -60,4 +60,40 @@ The next set of prompts will be to begin the self signed certification process t
 <br>`Email Address []:`
 
 Now the certificate will be generated and could take some time.
-<br>``
+Last in the automated process some unique authorization keys will be printed out.
+<br>`define('AUTH_KEY',         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('SECURE_AUTH_KEY',  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('LOGGED_IN_KEY',    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('NONCE_KEY',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('AUTH_SALT',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('SECURE_AUTH_SALT', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('LOGGED_IN_SALT',   'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<br>`define('NONCE_SALT',       'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+
+Copy all 8 rows, open the `wp-config.php` file and replace the default matching set of lines.
+Then locate the matching following 3 lines and replace the values so that they match the following values.
+<br>`define( 'DB_NAME', 'wordpress' );`
+<br>`define( 'DB_USER', 'wordpressuser' );`
+<br>`define( 'DB_PASSWORD', 'password' );`
+
+These values were set during the install script's process. The password can be changed with the following commands.
+<br>`sudo mariadb`
+<br>`SET PASSWORD FOR 'wordpressuser'@'localhost' = PASSWORD('newpass');`
+
+Add this additional definition to `wp-config.php`.
+<br>`define( 'FS_METHOD', 'direct' );`
+
+Reload the NGINX configuration file and check for syntax errors.
+<br>`sudo nginx -t`
+
+Which should output the following lines.
+<br>`nginx: [warn] "ssl_stapling" ignored, issuer certificate not found for certificate "/etc/ssl/certs/nginx-selfsigned.crt"`
+<br>`nginx: the configuration file /etc/nginx/nginx.conf syntax is ok`
+<br>`nginx: configuration file /etc/nginx/nginx.conf test is successful`
+
+The error is expected because of our self signed SSL certificate.
+Reload nginx.
+<br>`sudo systemctl reload nginx`
+
+
+
