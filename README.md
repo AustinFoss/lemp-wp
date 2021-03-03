@@ -42,3 +42,22 @@ Run the install script.
 <br>`sudo ./install.bash`
 
 This will do an update/upgrade and install necessary apt packages.
+You will then begin the mysql_secure_installation process and be prompted to confirm your sudo password among other things.
+<br>`Enter current password for root (enter for none):`
+<br>`Change the root password? [Y/n]` n
+<br>`Remove anonymous users? [Y/n]` y
+<br>`Disallow root login remotely? [Y/n]` y
+<br>`Remove test database and access to it? [Y/n]` y
+<br>`Reload privilege tables now? [Y/n]` y
+
+The next set of prompts will be to begin the self signed certification process to enable SSL.
+<br>`Country Name (2 letter code) [AU]:`
+<br>`State or Province Name (full name) [Some-State]:`
+<br>`Locality Name (eg, city) []:`
+<br>`Organization Name (eg, company) [Internet Widgits Pty Ltd]:`
+<br>`Organizational Unit Name (eg, section) []:`
+<br>`Common Name (e.g. server FQDN or YOUR name) []:`
+<br>`Email Address []:`
+
+Now the certificate will be generated and could take some time.
+<br>``
