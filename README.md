@@ -2,6 +2,7 @@
 <p>For Use With Ubuntu 20.04</p>
 <h2>SSH Lockdown &amp; Non-root sudo User</h2>
 Give the new user a username of your choice, enter strong password and any other desired user information.
+
 <br>`adduser username`
 
 Add the user to the sudo group.
