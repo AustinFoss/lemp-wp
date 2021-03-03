@@ -3,7 +3,7 @@
 apt update
 apt upgrade -y
 
-apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
+apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip -y
 
 ufw allow 'Nginx Full'
 
