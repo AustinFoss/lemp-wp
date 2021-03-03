@@ -11,7 +11,7 @@ Add the user to the sudo group.
 
 Assuming you added an ssh public key to your VPS server on its creation, and were not asked for a passwod on logging in to the server, copy the key to the new user's directory and give ownership to the user.
 
-`mkdir /home/username/.ssh`
+`mkdir /home/username/.ssh`<br>
 `cp .ssh/authorized_keys /home/username/.ssh/`
 `chown -R username /home/username/.ssh`
 
