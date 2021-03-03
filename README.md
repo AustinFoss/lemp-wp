@@ -95,5 +95,7 @@ The error is expected because of our self signed SSL certificate.
 Reload nginx.
 <br>`sudo systemctl reload nginx`
 
+You will now be able to navigate to the Wordpress landing page using the IP address of your VPS over HTTPS in a browser.
+<br>`https://xxx.xxx.xxx.xxx`
 
-
+There will again be an error due to the self signed nature of our SSL certifcate. Simply click "Advanced" and "Proceed".
