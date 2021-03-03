@@ -53,3 +53,5 @@ chown -R www-data:www-data /var/www/wordpress
 
 unlink /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
+
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
