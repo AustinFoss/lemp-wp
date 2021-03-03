@@ -33,3 +33,12 @@ You should now be able to ssh into your server like this.
 If this does not work you are now locked out of the VPS permanently. You will have to destroy the installation and try again, one step at a time to find where the problem happened.
 
 <h2>Update &amp; Begin Installation</h2>
+
+Clone this repo into the non-root user's home directory
+<br>`git clone https://github.com/AustinFoss/lemp-wp.git`
+
+Run the install script.
+<br>`cd lemp-wp`
+<br>`sudo ./install.bash`
+
+This will do an update/upgrade and install necessary apt packages.
