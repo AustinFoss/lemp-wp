@@ -12,7 +12,7 @@ mysql_secure_installation
 mkdir /var/www/wordpress
 chown -R $USER:$USER /var/www/wordpress
 
-cp /etc/nginx/sites-available/default /etc/nginx/sites-available/wordpress
+cp wordpress-certbot /etc/nginx/sites-available/wordpress
 
 mariadb <<EOF
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
