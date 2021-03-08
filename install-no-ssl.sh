@@ -3,7 +3,7 @@
 apt update
 apt upgrade -y
 
-apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip certbot python3-certbot-nginx -y
+apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip -y
 
 ufw allow 'Nginx Full'
 
@@ -12,7 +12,7 @@ mysql_secure_installation
 mkdir /var/www/wordpress
 chown -R $USER:$USER /var/www/wordpress
 
-cp wordpress /etc/nginx/sites-available/wordpress
+cp wordpress-no-ssl /etc/nginx/sites-available/wordpress
 
 mariadb <<EOF
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
