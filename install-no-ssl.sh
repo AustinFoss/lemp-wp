@@ -7,6 +7,8 @@ apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-
 
 ufw allow 'Nginx Full'
 
+echo " "
+
 mysql_secure_installation
 
 mkdir /var/www/wordpress
@@ -33,5 +35,10 @@ chown -R www-data:www-data /var/www/wordpress
 unlink /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
 
+echo " "
+echo "Using 'sudo nano /var/www/wordpress/wp-config.php'"
+echo "Copy the following definitions into the placeholder statements"
+echo " "
 curl -s https://api.wordpress.org/secret-key/1.1/salt/
 echo "define( 'FS_METHOD', 'direct' );"
+
