@@ -1,110 +1,113 @@
-<h1>A LEMP Stack Automated Install For Wordpress</h1>
-<p>For Use With Ubuntu 20.04</p>
-<h2>SSH Lockdown &amp; Non-root sudo User</h2>
-
-Give the new user a username of your choice, enter strong password and any other desired user information.
-<br>`adduser username`
-
-Add the user to the sudo group.
-<br>`usermod -aG sudo username`
-
-Assuming you added an ssh public key to your VPS server on its creation, and were not asked for a passwod on logging in to the server, copy the key to the new user's directory and give ownership to the user.
-<br>`mkdir /home/username/.ssh`
-<br>`cp .ssh/authorized_keys /home/username/.ssh/`
-<br>`chown -R username /home/username/.ssh`
-
-Edit the ssh configuration to a custom port, disable root access, and disable password logins.
-<br>`nano /etc/ssh/sshd_config`
-<br>`Port XXXX`
-<br>`PermitRootLogin no`
-<br>`PasswordAuthentication no`
-<br>`systemctl reload ssh`
-
-Add the custom port number to the firewall rules and enable the firewall
-<br>`ufw allow XXXX`
-<br>`ufw enable`
-
-You will be asked to confirm that this may disrupted your ssh connection, accept with `y` and then logout.
-<br>`exit`
-
-You should now be able to ssh into your server like this.
-<br>`ssh -p XXXX username@xxx.xxx.xxx.xxxx`
-
-If this does not work you are now locked out of the VPS permanently. You will have to destroy the installation and try again, one step at a time to find where the problem happened.
+<h1>WordPress On LEMP</h1>
+    <p>Tested For Use With Ubuntu Server 20.04<p>
+    <p>Everything going forward assumes an already installed system with a non-root user in the sudo user group. As well it is highly recommended to have configured SSH to reject root user access, use a custom port, and deny password authentication.
+    <br> If this is not yet done please refer to my blog on this repository or any other </p>
 
 <h2>Update &amp; Begin Installation</h2>
 
-Clone this repo into the non-root user's home directory
+<p>Software Installed:</p>
+<ul>
+    <li> NGINX
+    <li> MariaDB
+    <li> PHP
+    <li> Certbot (if you own a domain name)
+</ul>
+
+<p>Clone this repo into the non-root user's home directory
 <br>`git clone https://github.com/AustinFoss/lemp-wp.git`
+<br>Run the install script appropriate for your environment.</p>
 
-Run the install script.
-<br>`cd lemp-wp`
-<br>`sudo ./install.bash`
+<ul>
+    <li>On a test system not public to the internet you can use: install-no-ssl.sh
+    <li>On publicly visible system, without a domain name registered use: install-self-sign.sh
+    <li>On publicly visible system, with a domain name registered use: install-certbot.sh
+</ul>
 
-This will do an update/upgrade and install necessary apt packages.
-You will then begin the mysql_secure_installation process and be prompted to confirm your sudo password among other things.
-<br>`Enter current password for root (enter for none):`
-<br>`Change the root password? [Y/n]` n
-<br>`Remove anonymous users? [Y/n]` y
-<br>`Disallow root login remotely? [Y/n]` y
-<br>`Remove test database and access to it? [Y/n]` y
-<br>`Reload privilege tables now? [Y/n]` y
+    cd lemp-wp
+    sudo ./install-x.sh
 
-The next set of prompts will be to begin the self signed certification process to enable SSL.
-<br>`Country Name (2 letter code) [AU]:`
-<br>`State or Province Name (full name) [Some-State]:`
-<br>`Locality Name (eg, city) []:`
-<br>`Organization Name (eg, company) [Internet Widgits Pty Ltd]:`
-<br>`Organizational Unit Name (eg, section) []:`
-<br>`Common Name (e.g. server FQDN or YOUR name) []:`
-<br>`Email Address []:`
+<p>This will do an update/upgrade and install all necessary apt packages.
+<br>You will then begin the mysql_secure_installation process and be prompted to confirm your sudo password among other things.</p>
+    
+    Enter current password for root (enter for none):
+    Change the root password? [Y/n] n
+    Remove anonymous users? [Y/n] y
+    Disallow root login remotely? [Y/n] y
+    Remove test database and access to it? [Y/n] y
+    Reload privilege tables now? [Y/n] y
 
-Now the certificate will be generated and could take some time.
-Last in the automated process some unique authorization keys will be printed out.
-<br>`define('AUTH_KEY',         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('SECURE_AUTH_KEY',  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('LOGGED_IN_KEY',    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('NONCE_KEY',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('AUTH_SALT',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('SECURE_AUTH_SALT', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('LOGGED_IN_SALT',   'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
-<br>`define('NONCE_SALT',       'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');`
+<p>The next set of prompts will be to begin the self signed certification process to enable SSL.</p>
+    
+    Country Name (2 letter code) [AU]:
+    State or Province Name (full name) [Some-State]:
+    Locality Name (eg, city) []:
+    Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+    Organizational Unit Name (eg, section) []:
+    Common Name (e.g. server FQDN or YOUR name) []:
+    Email Address []:
 
-Copy all 8 rows, open the `/var/www/wordpress/wp-config.php` file and replace the default matching set of lines.
-Then locate the matching following 3 lines and replace the values so that they match the following values.
-<br>`define( 'DB_NAME', 'wordpress' );`
-<br>`define( 'DB_USER', 'wordpressuser' );`
-<br>`define( 'DB_PASSWORD', 'password' );`
+<p>Now the certificate will be generated and could take some time.
+<br>Last in the automated process some unique authorization keys will be printed out.
+<br><br>Copy all 9 rows</p>
 
-These values were set during the install script's process. The password can be changed with the following commands.
-<br>`sudo mariadb`
-<br>`SET PASSWORD FOR 'wordpressuser'@'localhost' = PASSWORD('newpass');`
+    define('AUTH_KEY',         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('SECURE_AUTH_KEY',  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('LOGGED_IN_KEY',    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('NONCE_KEY',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('AUTH_SALT',        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('SECURE_AUTH_SALT', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('LOGGED_IN_SALT',   'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define('NONCE_SALT',       'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    define( 'FS_METHOD', 'direct' );
 
-Add this additional definition to `wp-config.php`.
-<br>`define( 'FS_METHOD', 'direct' );`
+<p>Open the `wp-config.php` file and replace the default matching block of lines.</p>
 
-Normal HTTP is currently being redirected by default to HTTPS, but this must be set to the IP address of your VPS in the second server block of `/etc/nginx/sites-available/wordpress`.
-<br>`sudo nano /etc/nginx/sites-available/wordpress`
-<br>`server {`
-<br>`    listen 80;`
-<br>`    listen [::]:80;`
-<br>`    server_name xxx.xxx.xxx.xxx;`
-<br>`    return 301 https://$server_name$request_uri;`
-<br>`}`
+    sudo nano /var/www/wordpress/wp-config.php
+
+<p>Then locate the matching following 3 lines at the top of the file and replace the values so that they match the following values.</p>
+
+    define( 'DB_NAME', 'wordpress' );
+    define( 'DB_USER', 'wordpressuser' );
+    define( 'DB_PASSWORD', 'password' );
+
+<p>These values were set during the install script's process when setting up MariaDB. The password can be changed with the following commands. It's not a very big security risk, as the database is only accessible if already logged into the server, but change it something of your choice if you wish.</p>
+    
+    sudo mariadb
+    SET PASSWORD FOR 'wordpressuser'@'localhost' = PASSWORD('newpass');
+    exit
+
+<p>Normal HTTP is currently being redirected by default to HTTPS, but this must be set to the IP address of your VPS in the second server block of `/etc/nginx/sites-available/wordpress`.</p>
+
+    sudo nano /etc/nginx/sites-available/wordpress
+    
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name xxx.xxx.xxx.xxx;
+    return 301 https://$server_name$request_uri;
+    }
 
 Reload the NGINX configuration file and check for syntax errors.
-<br>`sudo nginx -t`
+    
+    sudo nginx -t
 
 Which should output the following lines.
-<br>`nginx: [warn] "ssl_stapling" ignored, issuer certificate not found for certificate "/etc/ssl/certs/nginx-selfsigned.crt"`
-<br>`nginx: the configuration file /etc/nginx/nginx.conf syntax is ok`
-<br>`nginx: configuration file /etc/nginx/nginx.conf test is successful`
+    
+    nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+    nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+<p>If you installed using "install-self-sign.sh you will also get the following error:</p>
+
+    nginx: [warn] "ssl_stapling" ignored, issuer certificate not found for certificate "/etc/ssl/certs/nginx-selfsigned.crt"
 
 The error is expected because of our self signed SSL certificate.
 Reload nginx.
-<br>`sudo systemctl reload nginx`
 
-You will now be able to navigate to the Wordpress landing page using the IP address of your VPS over HTTPS in a browser.
-<br>`https://xxx.xxx.xxx.xxx`
+    sudo systemctl reload nginx
 
-There will again be an error due to the self signed nature of our SSL certifcate. Simply click "Advanced" and proceed to Wordpress installation page. Select your language, name your blog, and create the admin user.
+You will now be able to navigate to the WordPress landing page using the IP address of your server or your registered domain name in a browser.
+
+    xxx.xxx.xxx.xxx
+    your-domain.tld
+
+Again, in the case of the `install-self-sign.sh` script thre will be an error. Simply click "Advanced" and proceed to WordPress installation page. If you used `install-no-ssl.sh` you will get warning that you are viewing the page over HTTP instead of HTTPS. Reminder, this should only be used on systems not public to the internet. With `install-certbot.sh` you should have no errors. Select your language, name your blog, and create the admin user.
