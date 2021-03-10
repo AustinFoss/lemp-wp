@@ -3,7 +3,7 @@
 apt update
 apt upgrade -y
 
-apt install nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip certbot python3-certbot-nginx -y
+apt install fail2ban nginx mariadb-server php-fpm php-mysql php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip certbot python3-certbot-nginx -y
 
 ufw allow 'Nginx Full'
 

@@ -1,7 +1,14 @@
 <h1>WordPress On LEMP</h1>
-    <p>Tested For Use With Ubuntu Server 20.04<p>
-    <p>Everything going forward assumes an already installed system with a non-root user in the sudo user group. As well it is highly recommended to have configured SSH to reject root user access, use a custom port, and deny password authentication.
-    <br> If this is not yet done please refer to my blog on this repository or any other </p>
+
+<p>Tested For Use With Ubuntu Server 20.04</p>
+<p>Everything going forward assumes an already installed system with a non-root user in the sudo user group. As well it is highly recommended to have configured SSH to reject root user access, use a custom port, and deny password authentication.
+<br>If this is not yet done please refer to my blog on this repository or any other instruction list on how to do so.</p>
+
+<p>These install scripts are a condensed form of this Digital Ocean guide by Lyn Muldrow and the subsequent prerequisit guide authors: 
+
+https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lemp-on-ubuntu-20-04</p>
+
+<p>I'm just trying to save my self, and you, a few extra clicks. IF you want to learn about what's happening more in depth please reffer to the above link.</p>
 
 <h2>Update &amp; Begin Installation</h2>
 
@@ -10,12 +17,15 @@
     <li> NGINX
     <li> MariaDB
     <li> PHP
-    <li> Certbot (if you own a domain name)
+    <li> Certbot (with install-certbot.sh)
+    <li> Fail2Ban (with install-certbot.sh or install-self-sign.sh)
 </ul>
 
-<p>Clone this repo into the non-root user's home directory
-<br>`git clone https://github.com/AustinFoss/lemp-wp.git`
-<br>Run the install script appropriate for your environment.</p>
+<p>Clone this repo into the non-root user's home directory</p>
+
+    git clone https://github.com/AustinFoss/lemp-wp.git
+
+<p>Run the install script appropriate for your environment.</p>
 
 <ul>
     <li>On a test system not public to the internet you can use: install-no-ssl.sh
@@ -36,7 +46,7 @@
     Remove test database and access to it? [Y/n] y
     Reload privilege tables now? [Y/n] y
 
-<p>The next set of prompts will be to begin the self signed certification process to enable SSL.</p>
+<p>For "self-sign" installs the next set of prompts will be to begin the self signed certification process to enable SSL. Enter any information you feel like, or leave blank.</p>
     
     Country Name (2 letter code) [AU]:
     State or Province Name (full name) [Some-State]:
@@ -46,9 +56,9 @@
     Common Name (e.g. server FQDN or YOUR name) []:
     Email Address []:
 
-<p>Now the certificate will be generated and could take some time.
-<br>Last in the automated process some unique authorization keys will be printed out.
-<br><br>Copy all 9 rows</p>
+<p>Now the certificate will be generated and could take some time.</p>
+<p><br>Last in the automated process some unique authorization keys will be printed out.
+<br>Copy all 9 rows:</p>
 
     define('AUTH_KEY',         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
     define('SECURE_AUTH_KEY',  'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
@@ -76,38 +86,41 @@
     SET PASSWORD FOR 'wordpressuser'@'localhost' = PASSWORD('newpass');
     exit
 
-<p>Normal HTTP is currently being redirected by default to HTTPS, but this must be set to the IP address of your VPS in the second server block of `/etc/nginx/sites-available/wordpress`.</p>
+<p>For "certbot" installs you need to make the following edit to the wordpress nginx configuration file. In the "server {}" block find the following line and edit it to look like this but replace the two values with your own registered domain name.</p>
 
     sudo nano /etc/nginx/sites-available/wordpress
     
     server {
-        listen 80;
-        listen [::]:80;
-        server_name xxx.xxx.xxx.xxx;
-    return 301 https://$server_name$request_uri;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        server_name you-domain.tld www.your-domain.tld;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
 
-Reload the NGINX configuration file and check for syntax errors.
+<p>Reload the NGINX configuration file and check for syntax errors.</p>
     
     sudo nginx -t
 
-Which should output the following lines.
+<p>Which should output the following lines.</p>
     
     nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
     nginx: configuration file /etc/nginx/nginx.conf test is successful
 
-<p>If you installed using "install-self-sign.sh you will also get the following error:</p>
+<p>If you installed using "install-self-sign.sh" you will also get the following error:</p>
 
     nginx: [warn] "ssl_stapling" ignored, issuer certificate not found for certificate "/etc/ssl/certs/nginx-selfsigned.crt"
 
-The error is expected because of our self signed SSL certificate.
-Reload nginx.
+<p>The error is expected because of our self signed SSL certificate.
+Reload nginx.</p>
 
     sudo systemctl reload nginx
 
-You will now be able to navigate to the WordPress landing page using the IP address of your server or your registered domain name in a browser.
+<p>"certbot" installs can now run the following to generate your certificate. This process will further modify the NGINX wordpress configuration file, you will be asked for an email to provide to the EFF if you wish(optional), and if you want to redirect to HTTPS(press "2" to answer yes).</p>
+
+    sudo certbot --nginx -d your-domain.tld -d www.your-domain.tld
+
+<p>You will now be able to navigate to the WordPress landing page using the IP address of your server or your registered domain name in a browser.</p>
 
     xxx.xxx.xxx.xxx
     your-domain.tld
 
-Again, in the case of the `install-self-sign.sh` script thre will be an error. Simply click "Advanced" and proceed to WordPress installation page. If you used `install-no-ssl.sh` you will get warning that you are viewing the page over HTTP instead of HTTPS. Reminder, this should only be used on systems not public to the internet. With `install-certbot.sh` you should have no errors. Select your language, name your blog, and create the admin user.
+<p>Again, in the case of the "install-self-sign.sh" script thre will be an error. Simply click "Advanced" and proceed to WordPress installation page. If you used "install-no-ssl.sh" you will get a warning that you are viewing the page over HTTP instead of HTTPS. Reminder, this should only be used on systems not public to the internet. With "install-certbot.sh" you should have no errors. Select your language, name your blog, and create the admin user.</p>
