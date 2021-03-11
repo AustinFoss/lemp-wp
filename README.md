@@ -114,7 +114,11 @@ Reload nginx.</p>
 
     sudo systemctl reload nginx
 
-<p>"certbot" installs can now run the following to generate your certificate. This process will further modify the NGINX wordpress configuration file, you will be asked for an email to provide to the EFF if you wish(optional), and if you want to redirect to HTTPS(press "2" to answer yes).</p>
+<p>Open the `wp-config.php` file.</p>
+
+    sudo nano /var/www/wordpress/wp-config.php
+
+<p>For both "no-ssl" and "certbot" installs there is a single server{} block in the file, where as "self-sign" has two. In each server{} block look for a line that reads `server_name _;` and replace the underscore with the name of your website. In the case of "no-ssl" and "self-sign" use the IP address of the server you used for the SSH login. For "certbot" installs change the line to look like this:</p>
 
     sudo certbot --nginx -d your-domain.tld -d www.your-domain.tld
 
