@@ -80,10 +80,10 @@ https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-l
     define( 'DB_USER', 'wordpressuser' );
     define( 'DB_PASSWORD', 'password' );
 
-<p>These values were set during the install script's process when setting up MariaDB. The password can be changed with the following commands. It's not a very big security risk, as the database is only accessible if already logged into the server, but change it something of your choice if you wish.</p>
+<p>These values were set during the install script's process when setting up MariaDB. The password can be changed with the following commands. It's not a very big security risk leaving it as 'password', because the database is only accessible if already logged into the server, but change it to 'another_password' of your choice if you wish.</p>
     
     sudo mariadb
-    ALTER USER 'wordpressuser'@'localhost' IDENTIFIED BY 'anotherpassword';
+    ALTER USER 'wordpressuser'@'localhost' IDENTIFIED BY 'another_password';
     exit
 
 <p>For "certbot" installs you need to make the following edit to the wordpress nginx configuration file. In the "server {}" block find the following line and edit it to look like this but replace the two values with your own registered domain name.</p>
